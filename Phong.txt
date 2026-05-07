@@ -1,0 +1,74 @@
+-- TUẤN GÂY HUB [BLOX FRUITS]
+local TuanGayHub = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local UIHeader = Instance.new("TextLabel")
+local FarmButton = Instance.new("TextButton")
+local LogoThươngHiệu = Instance.new("ImageLabel")
+local CloseButton = Instance.new("TextButton")
+
+-- Cài đặt Giao diện
+TuanGayHub.Name = "TuanGayHub"
+TuanGayHub.Parent = game.CoreGui
+TuanGayHub.ResetOnSpawn = false
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = TuanGayHub
+MainFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+MainFrame.Position = UDim2.new(0.3, 0, 0.3, 0)
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Active = true
+MainFrame.Draggable = true
+
+UIHeader.Name = "UIHeader"
+UIHeader.Parent = MainFrame
+UIHeader.Size = UDim2.new(1, 0, 0, 40)
+UIHeader.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+UIHeader.Text = "TUẤN GÂY HUB"
+UIHeader.TextColor3 = Color3.fromRGB(255, 255, 255)
+UIHeader.TextSize = 20
+UIHeader.Font = Enum.Font.SourceSansBold
+
+LogoThươngHiệu.Name = "Logo"
+LogoThươngHiệu.Parent = MainFrame
+LogoThươngHiệu.Position = UDim2.new(0.35, 0, 0.25, 0)
+LogoThươngHiệu.Size = UDim2.new(0, 90, 0, 90)
+LogoThươngHiệu.Image = "rbxassetid://119935888860104"
+LogoThươngHiệu.BackgroundTransparency = 1
+
+FarmButton.Name = "FarmButton"
+FarmButton.Parent = MainFrame
+FarmButton.Position = UDim2.new(0.1, 0, 0.75, 0)
+FarmButton.Size = UDim2.new(0.8, 0, 0, 40)
+FarmButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+FarmButton.Text = "BẬT AUTO FARM [LEVEL]"
+FarmButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+CloseButton.Name = "Close"
+CloseButton.Parent = MainFrame
+CloseButton.Position = UDim2.new(0.9, 0, 0, 0)
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Text = "X"
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CloseButton.MouseButton1Click:Connect(function() TuanGayHub:Destroy() end)
+
+-- Logic Auto Farm
+_G.AutoFarm = false
+FarmButton.MouseButton1Click:Connect(function()
+    _G.AutoFarm = not _G.AutoFarm
+    FarmButton.Text = _G.AutoFarm and "ĐANG FARM [ON]" or "BẬT AUTO FARM [LEVEL]"
+    
+    spawn(function()
+        while _G.AutoFarm do
+            task.wait()
+            pcall(function()
+                for _,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                    if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                        local tool = game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool") or game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+                        if tool then tool:Activate() end
+                    end
+                end
+            end)
+        end
+    end)
+end)
