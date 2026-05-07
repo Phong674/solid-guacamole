@@ -1,0 +1,1 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Phong674/solid-guacamole/refs/heads/main/mauscriptchoaetik.txt",true))()
