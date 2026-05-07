@@ -1,0 +1,129 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "TUẤN GÂY HUB [Blox Fruits]",
+   LoadingTitle = "Đang khởi tạo bởi Tuấn Gây...",
+   LoadingSubtitle = "Vui lòng chờ giây lát",
+   ConfigurationSaving = { Enabled = false },
+   ImageId = 119935888860104 -- Logo thương hiệu của bạn
+})
+
+-- TAB AUTO FARM
+local FarmTab = Window:CreateTab("Auto Farm [Tuấn Gây]", 119935888860104)
+
+_G.AutoFarm = false
+_G.BringMob = false
+
+FarmTab:CreateSection("--- [ CHỨC NĂNG FARM ] ---")
+
+FarmTab:CreateToggle({
+   Name = "Bật/Tắt Auto Farm [Level]",
+   CurrentValue = false,
+   Callback = function(Value)
+       _G.AutoFarm = Value
+       spawn(function()
+           while _G.AutoFarm do
+               wait()
+               pcall(function()
+                   for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                       if v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+                           game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 0, 5)
+                           local tool = game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool") or game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+                           if tool then
+                               game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
+                               tool:Activate()
+                           end
+                       end
+                   end
+               end)
+           end
+       end)
+   end,
+})
+
+FarmTab:CreateToggle({
+   Name = "Gom Quái [Bring Mob]",
+   CurrentValue = false,
+   Callback = function(Value)
+       _G.BringMob = Value
+       spawn(function()
+           while _G.BringMob do
+               wait()
+               pcall(function()
+                   local firstMob = nil
+                   for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+                       if v:FindFirstChild("HumanoidRootPart") then
+                           if not firstMob then
+                               firstMob = v.HumanoidRootPart
+                           else
+                               v.HumanoidRootPart.CFrame = firstMob.CFrame
+                           end
+                       end
+                   end
+               end)
+           end
+       end)
+   end,
+})
+
+-- TAB TÙY CHỈNH
+local CustomTab = Window:CreateTab("Thêm Script [Tùy Chỉnh]", 119935888860104)
+
+local UserLink = ""
+local UserName = ""
+
+CustomTab:CreateSection("--- [ NHẬP THÔNG TIN ] ---")
+
+CustomTab:CreateInput({
+   Name = "Tên Script [ Nhập tên vào đây ]",
+   PlaceholderText = "[Ví dụ: Auto Farm Pro]",
+   Callback = function(val) UserName = val end,
+})
+
+CustomTab:CreateInput({
+   Name = "Dán Link [ Nhập link raw tại đây ]",
+   PlaceholderText = "[https://raw.githubusercontent...]",
+   Callback = function(val) UserLink = val end,
+})
+
+CustomTab:CreateButton({
+   Name = "KÍCH HOẠT [ Bấm để chạy ]",
+   Callback = function()
+       if UserLink ~= "" then
+           Rayfield:Notify({
+               Title = "TUẤN GÂY HUB",
+               Content = "Đang chạy bản: [" .. UserName .. "]",
+               Duration = 3,
+               Image = 119935888860104
+           })
+           pcall(function()
+               loadstring(game:HttpGet(UserLink))()
+           end)
+       else
+           Rayfield:Notify({
+               Title = "[ CẢNH BÁO ]",
+               Content = "Vui lòng nhập link vào ô trống!",
+               Duration = 3,
+               Image = 119935888860104
+           })
+       end
+   end,
+})
+
+-- TAB CÀI ĐẶT
+local SettingTab = Window:CreateTab("Cài Đặt", 119935888860104)
+
+SettingTab:CreateButton({
+   Name = "Tắt Menu [ Tuấn Gây ]",
+   Callback = function()
+       Rayfield:Destroy()
+   end,
+})
+
+-- THÔNG BÁO KHI MỞ
+Rayfield:Notify({
+   Title = "TUẤN GÂY HUB",
+   Content = "Chúc bạn farm vui vẻ!",
+   Duration = 5,
+   Image = 119935888860104
+})
