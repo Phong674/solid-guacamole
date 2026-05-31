@@ -1,0 +1,23 @@
+import json
+
+ff_config_data = {
+    "setting_version": "2026.1",
+    "sensitivity": {
+        "general": 98,
+        "red_dot": 88,
+        "scope_2x": 82,
+        "scope_4x": 78
+    },
+    "hud": {
+        "fire_button_size": 45,
+        "fire_button_position_x": 75.5,
+        "fire_button_position_y": 25.0
+    }
+}
+
+try:
+    with open("ff_setup.json", "w", encoding="utf-8") as file:
+        json.dump(ff_config_data, file, indent=4, ensure_ascii=False)
+    print("Tạo file cấu hình ff_setup.json thành công!")
+except IOError:
+    print("Lỗi: Không thể ghi file vào bộ nhớ.")
